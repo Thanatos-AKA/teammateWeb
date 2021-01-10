@@ -35,8 +35,13 @@
 			
 			//sql
 			if(!$iserror){
+				//prepare hash
+				$salt = substr(md5(uniqid(mt_rand(), true)), 0, 5);
+				$cryptPassword = hash('sha256', $password . $salt);
+
+
 				$conn = mysqli_connect("localhost", "iw3htp", "password");
-				$query = "INSERT INTO `members` (`id`, `password`, `name`) VALUES('$id', '$password', '$name')";
+				$query = "INSERT INTO `members` (`id`, `salt`, `cryptPassword`, `name`) VALUES('$id', '$salt', '$cryptPassword', '$name')";
 				
 				if(!$conn){
 					die("<p>can't connect to database</p></body></html>");
@@ -52,7 +57,7 @@
 				//session
 				$_SESSION['user'] = $id;
 				
-				//3秒後重新導向新頁滅
+				//3秒後重新導向主業
 				die("<p>$name , you have registered.</p><script>window.addEventListener('load', function(){setTimeout(function(){location.href='MainPage.php'}, 1000)})</script></body></html>");
 			}
 		}
