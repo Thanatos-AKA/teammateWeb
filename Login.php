@@ -31,22 +31,36 @@
 			//sql
 			if(!$iserror){
 				$conn = new mysqli("localhost", "iw3htp", "password", "project_db");
-				$query = "SELECT `name` FROM `members` WHERE `password` = '$password' AND `id` = '$id'";
-				
 				if($conn -> connect_error){
 					die("<p>can't connect to database</p></body></html>");
 				}
-				
+
+				$query = "SELECT `cryptPassword`, `salt` FROM `members` WHERE `id` = '$id'";
 				$result = $conn -> query($query);
 				if($result -> num_rows > 0){
 					while($row = $result -> fetch_assoc()){
-						$name = $row["name"];
+						$salt = $row["salt"];
+						$cryptPassword = $row["cryptPassword"];
+						$myCryptPassword = hash('sha256', $password . $salt);
 					}
 				}
 				else{
 					die("0 result");
 				}
 				
+				if($cryptPassword = $myCryptPassword){
+					$query = "SELECT `name` FROM `members` WHERE `id` = '$id'";
+					$result = $conn -> query($query);
+					if($result -> num_rows > 0){
+						while($row = $result -> fetch_assoc()){
+							$name = $row["name"];
+						}
+					}
+				}
+				else{
+					die("0 result");
+				}
+
 				$result -> free_result();
 				$conn -> close();
 				
