@@ -41,6 +41,10 @@
 
 
 				$conn = mysqli_connect("localhost", "iw3htp", "password");
+				$id = $conn -> real_escape_string($id);
+				$password = $conn -> real_escape_string($password);
+				$name = $conn -> real_escape_string($name);
+
 				$query = "INSERT INTO `members` (`id`, `salt`, `cryptPassword`, `name`) VALUES('$id', '$salt', '$cryptPassword', '$name')";
 				
 				if(!$conn){

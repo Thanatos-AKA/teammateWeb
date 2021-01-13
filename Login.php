@@ -31,6 +31,9 @@
 			//sql
 			if(!$iserror){
 				$conn = new mysqli("localhost", "iw3htp", "password", "project_db");
+				$id = $conn -> real_escape_string($id);
+				$password = $conn -> real_escape_string($password);
+				
 				if($conn -> connect_error){
 					die("<p>can't connect to database</p></body></html>");
 				}
